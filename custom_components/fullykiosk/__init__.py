@@ -36,7 +36,6 @@ SET_CONFIGURATION_STRING_SCHEMA = vol.Schema(
 )
 
 
-# TODO List the platforms that you want to support.
 # For your initial PR, limit it to 1 platform.
 PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 
@@ -48,12 +47,12 @@ async def async_setup(hass: HomeAssistant, config: dict):
         """Call set string config handler."""
         await async_handle_set_config_string_service(hass, call)
 
-        hass.services.async_register(
-            DOMAIN,
-            SERVICE_SET_CONFIGURATION_STRING,
-            async_set_config_string,
-            schema=SET_CONFIGURATION_STRING_SCHEMA,
-        )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SET_CONFIGURATION_STRING,
+        async_set_config_string,
+        schema=SET_CONFIGURATION_STRING_SCHEMA,
+    )
 
     return True
 
@@ -116,7 +115,7 @@ async def async_handle_set_config_string_service(hass, call):
     entity_id = call.data[ATTR_ENTITY_ID]
 
     setting = call.data[CONF_FULLY_SETTING]
-    settingValue = call.data[CONF_FULLY_SETTTING_VALUE]
+    setting_value = call.data[CONF_FULLY_SETTTING_VALUE]
 
 
-    await hass.data[DOMAIN][entry.entity_id].setConfigurationString(entity_id, setting, settingValue)
+    await fully.setConfigurationString(entity_id, setting, setting_value)
