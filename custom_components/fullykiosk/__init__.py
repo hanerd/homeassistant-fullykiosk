@@ -42,6 +42,18 @@ PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Fully Kiosk Browser component."""
+
+    async def async_set_config_string(call):
+        """Call set string config handler."""
+        await async_handle_set_config_string_service(hass, call)
+
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SET_CONFIGURATION_STRING,
+        async_set_config_string,
+        schema=SET_CONFIGURATION_STRING_SCHEMA,
+    )
+
     return True
 
 
@@ -79,17 +91,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.async_create_task(
             hass.config_entries.async_forward_entry_setup(entry, component)
         )
-
-    async def async_set_config_string(call):
-        """Call set string config handler."""
-        await async_handle_set_config_string_service(hass, call)
-
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_SET_CONFIGURATION_STRING,
-        async_set_config_string,
-        schema=SET_CONFIGURATION_STRING_SCHEMA,
-    )
 
     return True
 
