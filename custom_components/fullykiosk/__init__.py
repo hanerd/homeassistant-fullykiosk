@@ -43,15 +43,15 @@ async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Fully Kiosk Browser component."""
 
     async def set_config_string(call):
-    """Call set string config handler."""
-    await async_set_config_string_service(hass, call)
+        """Call set string config handler."""
+        await async_set_config_string_service(hass, call)
 
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_SET_CONFIGURATION_STRING,
-        async_set_config_string,
-        schema=SET_CONFIGURATION_STRING_SCHEMA,
-    )
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_SET_CONFIGURATION_STRING,
+            async_set_config_string,
+            schema=SET_CONFIGURATION_STRING_SCHEMA,
+        )
 
     return True
 
