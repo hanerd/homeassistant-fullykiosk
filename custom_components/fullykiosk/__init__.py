@@ -9,7 +9,7 @@ from fullykiosk import FullyKiosk
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_PASSWORD
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_PASSWORD, ATTR_ENTITY_ID
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -44,7 +44,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
 
     async def async_set_config_string(call):
         """Call set string config handler."""
-        await async_set_config_string_service(hass, call)
+        await async_handle_set_config_string_service(hass, call)
 
         hass.services.async_register(
             DOMAIN,
@@ -109,10 +109,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     return unload_ok
 
-async def async_handle_set_configuration_string(hass, call):
+async def async_handle_set_config_string_service(hass, call):
     """Handle setting configuration string."""
     entity_id = call.data[ATTR_ENTITY_ID]
-    entity_state = hass.states.get(entity_id[0])
 
     setting = call.data[CONF_FULLY_SETTING]
     settingValue = call.data[CONF_FULLY_SETTTING_VALUE]
