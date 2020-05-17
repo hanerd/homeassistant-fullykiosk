@@ -1,20 +1,22 @@
 """The Fully Kiosk Browser integration."""
 import asyncio
 import logging
-import voluptuous as vol
-
 from datetime import timedelta
+
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import (ATTR_ENTITY_ID, CONF_HOST, CONF_PASSWORD,
+                                 CONF_PORT)
+from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers.dispatcher import async_dispatcher_send
+from homeassistant.helpers.update_coordinator import (DataUpdateCoordinator,
+                                                      UpdateFailed)
 
 from fullykiosk import FullyKiosk
 
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_PASSWORD, ATTR_ENTITY_ID
-from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers.dispatcher import async_dispatcher_send
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-
-from .const import DOMAIN, COORDINATOR, CONTROLLER
+from .const import CONTROLLER, COORDINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
