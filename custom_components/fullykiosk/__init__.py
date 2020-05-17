@@ -42,7 +42,7 @@ PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Fully Kiosk Browser component."""
 
-    async def set_config_string(call):
+    async def async_set_config_string(call):
         """Call set string config handler."""
         await async_set_config_string_service(hass, call)
 
