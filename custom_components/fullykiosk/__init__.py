@@ -18,7 +18,21 @@ from .const import DOMAIN, COORDINATOR, CONTROLLER
 
 _LOGGER = logging.getLogger(__name__)
 
+CONF_FULLY_SETTING = "fully_config_setting"
+CONF_FULLY_SETTTING_VALUE = "fully_config_setting_value"
+
 CONFIG_SCHEMA = vol.Schema({DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA)
+
+SERVICE_SET_CONFIGURATION_STRING = "set_config_string"
+
+SET_CONFIGURATION_STRING_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
+        vol.Required(CONF_FULLY_SETTING): cv.string,
+        vol.Optional(CONF_FULLY_SETTTING_VALUE): cv.string,
+    }
+)
+
 
 # TODO List the platforms that you want to support.
 # For your initial PR, limit it to 1 platform.
@@ -27,6 +41,18 @@ PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Fully Kiosk Browser component."""
+
+    async def set_config_string(call):
+    """Call set string config handler."""
+    await async_set_config_string_service(hass, call)
+
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SET_CONFIGURATION_STRING,
+        async_set_config_string,
+        schema=SET_CONFIGURATION_STRING_SCHEMA,
+    )
+
     return True
 
 
@@ -82,3 +108,14 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
+
+async def async_handle_set_configuration_string(hass, call):
+    """Handle setting configuration string."""
+    entity_id = call.data[ATTR_ENTITY_ID]
+    entity_state = hass.states.get(entity_id[0])
+
+    setting = call.data[CONF_FULLY_SETTING]
+    settingValue = call.data[CONF_FULLY_SETTTING_VALUE]
+
+
+    await hass.data[DOMAIN][entry.entity_id].setConfigurationString(entity_id, setting, settingValue)
