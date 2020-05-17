@@ -25,7 +25,7 @@ CONF_FULLY_SETTTING_VALUE = "fully_config_setting_value"
 
 CONFIG_SCHEMA = vol.Schema({DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA)
 
-SERVICE_SET_CONFIGURATION_STRING = "set_config_string"
+SERVICE_SET_CONFIGURATION_STRING = "set_configuration_string"
 
 SET_CONFIGURATION_STRING_SCHEMA = vol.Schema(
     {
@@ -43,14 +43,14 @@ PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Fully Kiosk Browser component."""
 
-    async def async_set_config_string(call):
+    async def async_set_configuration_string(call):
         """Call set string config handler."""
-        await async_handle_set_config_string_service(hass, call)
+        await async_handle_set_configuration_string_service(hass, call)
 
     hass.services.async_register(
         DOMAIN,
         SERVICE_SET_CONFIGURATION_STRING,
-        async_set_config_string,
+        async_set_configuration_string,
         schema=SET_CONFIGURATION_STRING_SCHEMA,
     )
 
@@ -110,7 +110,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     return unload_ok
 
-async def async_handle_set_config_string_service(hass, call):
+async def async_handle_set_configuration_string_service(hass, call):
     """Handle setting configuration string."""
     entity_id = call.data[ATTR_ENTITY_ID]
 
