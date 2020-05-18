@@ -10,7 +10,6 @@ from homeassistant.const import (ATTR_ENTITY_ID, CONF_HOST, CONF_PASSWORD,
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
-from homeassistant.helpers import service
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.update_coordinator import (DataUpdateCoordinator,
                                                       UpdateFailed)
@@ -116,7 +115,7 @@ async def async_handle_set_configuration_string_service(hass, call):
     entity_id = call.data[ATTR_ENTITY_ID]
 
     setting = call.data[CONF_FULLY_SETTING]
-    setting_value = call.data[CONF_FULLY_SETTTING_VALUE]
+    value = call.data[CONF_FULLY_SETTTING_VALUE]
 
 
-    await fully.setConfigurationString(entity_id, setting, setting_value)
+    await fully.setConfigurationString(entity_id, setting, value)
