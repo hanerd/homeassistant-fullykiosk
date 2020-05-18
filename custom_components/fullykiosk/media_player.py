@@ -39,14 +39,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     async def set_configuration_string(call) -> None:
         """Call set string config handler."""
-
-        entity_ids = call.data.get(ATTR_ENTITY_ID)
-        print(entity_ids)
-
-        for device in entity_ids:
-            await device.setConfigurationString(
-                call.data[CONF_FULLY_SETTING], call.data[CONF_FULLY_SETTING_VALUE]
-            )
+        await async_handle_set_configuration_string_service(call)
 
     hass.services.async_register(
         DOMAIN,
@@ -97,3 +90,9 @@ class FullyMediaPlayer(MediaPlayerDevice):
     async def async_update(self):
         """Update Fully Kiosk Browser entity."""
         await self.coordinator.async_request_refresh()
+
+    async def async_handle_set_configuration_string_service(self, call):
+        """Handle configuration string call."""
+        self.controller.setConfigurationString(
+            call.data[CONF_FULLY_SETTING], call.data[CONF_FULLY_SETTING_VALUE]
+        )
