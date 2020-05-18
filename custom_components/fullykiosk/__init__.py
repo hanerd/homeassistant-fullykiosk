@@ -21,7 +21,7 @@ from .const import CONTROLLER, COORDINATOR, DOMAIN
 _LOGGER = logging.getLogger(__name__)
 
 CONF_FULLY_SETTING = "fully_config_setting"
-CONF_FULLY_SETTTING_VALUE = "fully_config_setting_value"
+CONF_FULLY_SETTING_VALUE = "fully_config_setting_value"
 
 CONFIG_SCHEMA = vol.Schema({DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA)
 
@@ -31,7 +31,7 @@ SET_CONFIGURATION_STRING_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
         vol.Required(CONF_FULLY_SETTING): cv.string,
-        vol.Optional(CONF_FULLY_SETTTING_VALUE): cv.string,
+        vol.Requred(CONF_FULLY_SETTING_VALUE): cv.string,
     }
 )
 
@@ -115,7 +115,7 @@ async def async_handle_set_configuration_string_service(hass, call):
     entity_id = call.data[ATTR_ENTITY_ID]
 
     setting = call.data[CONF_FULLY_SETTING]
-    value = call.data[CONF_FULLY_SETTTING_VALUE]
+    value = call.data[CONF_FULLY_SETTING_VALUE]
 
 
     await fully.setConfigurationString(entity_id, setting, value)
