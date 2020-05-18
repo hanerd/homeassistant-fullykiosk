@@ -9,7 +9,6 @@ from homeassistant.const import (ATTR_ENTITY_ID, CONF_HOST, CONF_PASSWORD,
                                  CONF_PORT)
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.update_coordinator import (DataUpdateCoordinator,
                                                       UpdateFailed)
@@ -20,20 +19,9 @@ from .const import CONTROLLER, COORDINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_FULLY_SETTING = "setting"
-CONF_FULLY_SETTING_VALUE = "value"
 
 CONFIG_SCHEMA = vol.Schema({DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA)
 
-SERVICE_SET_CONFIGURATION_STRING = "set_configuration_string"
-
-SET_CONFIGURATION_STRING_SCHEMA = vol.Schema(
-    {
-        vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
-        vol.Required(CONF_FULLY_SETTING): cv.string,
-        vol.Required(CONF_FULLY_SETTING_VALUE): cv.string,
-    }
-)
 
 PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 
@@ -78,24 +66,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.async_create_task(
             hass.config_entries.async_forward_entry_setup(entry, component)
         )
-
-    async def set_configuration_string(call) -> None:
-        """Call set string config handler."""
-
-        entity_id = call.data[ATTR_ENTITY_ID]
-        setting = call.data[CONF_FULLY_SETTING]
-        value = call.data[CONF_FULLY_SETTING_VALUE]
-        
-        data = await hass.async_add_executor_job(fully.setConfigurationString(setting, value))
-        return data
-
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_SET_CONFIGURATION_STRING,
-        set_configuration_string,
-        schema=SET_CONFIGURATION_STRING_SCHEMA,
-    )
-
 
     return True
 

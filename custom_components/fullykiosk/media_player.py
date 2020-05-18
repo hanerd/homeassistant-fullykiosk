@@ -2,16 +2,30 @@
 import json
 import logging
 
-from homeassistant.components.media_player import (
-    DEVICE_CLASS_SPEAKER,
-    SUPPORT_PLAY_MEDIA,
-    MediaPlayerDevice,
-)
+import voluptuous as vol
+from homeassistant.components.media_player import (DEVICE_CLASS_SPEAKER,
+                                                   SUPPORT_PLAY_MEDIA,
+                                                   MediaPlayerDevice)
+from homeassistant.const import ATTR_ENTITY_ID
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
-from .const import DOMAIN, COORDINATOR, CONTROLLER
+from .const import CONTROLLER, COORDINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
+
+CONF_FULLY_SETTING = "setting"
+CONF_FULLY_SETTING_VALUE = "value"
+
+SERVICE_SET_CONFIGURATION_STRING = "set_configuration_string"
+
+SET_CONFIGURATION_STRING_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
+        vol.Required(CONF_FULLY_SETTING): cv.string,
+        vol.Required(CONF_FULLY_SETTING_VALUE): cv.string,
+    }
+)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
@@ -20,6 +34,28 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     controller = hass.data[DOMAIN][config_entry.entry_id][CONTROLLER]
 
     async_add_entities([FullyMediaPlayer(coordinator, controller)], False)
+
+    async def set_configuration_string(call) -> None:
+        """Call set string config handler."""
+
+        entity_ids = call.data[ATTR_ENTITY_ID]
+        if entity_ids:
+            devices = [
+                device for device in hass.data[DOMAIN] if device.entity_id in entity_ids
+            ]
+        else:
+            devices = hass.data[DOMAIN]
+        for device in devices:
+            await device.setConfigurationString(
+                call.data[CONF_FULLY_SETTING], call.data[CONF_FULLY_SETTING_VALUE]
+            )
+
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SET_CONFIGURATION_STRING,
+        set_configuration_string,
+        schema=SET_CONFIGURATION_STRING_SCHEMA,
+    )
 
 
 class FullyMediaPlayer(MediaPlayerDevice):
