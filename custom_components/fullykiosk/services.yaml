@@ -1,0 +1,12 @@
+set_configuration_string:
+  description: 'Sets a string-based configuration value'
+  fields:
+    entity_id:
+      description: '(Required) - Fully Instance to configure'
+      example: 'fullykiosk.mediaTablet'
+    setting:
+      description: 'Setting to modify'
+      example: 'startUrl'
+    stringValue:
+      description: 'string (required) setting value'
+      example: 'https://home-assistant.io'
