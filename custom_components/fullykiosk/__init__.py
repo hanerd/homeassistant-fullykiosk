@@ -20,8 +20,8 @@ from .const import CONTROLLER, COORDINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_FULLY_SETTING = "fully_config_setting"
-CONF_FULLY_SETTING_VALUE = "fully_config_setting_value"
+CONF_FULLY_SETTING = "setting"
+CONF_FULLY_SETTING_VALUE = "value"
 
 CONFIG_SCHEMA = vol.Schema({DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA)
 
