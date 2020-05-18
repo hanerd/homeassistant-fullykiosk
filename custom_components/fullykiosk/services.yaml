@@ -1,5 +1,5 @@
 set_configuration_string:
-  description: 'Sets a string-based configuration value'
+  description: 'Sets string-based configuration value'
   fields:
     entity_id:
       description: 'Fully Instance to configure'
