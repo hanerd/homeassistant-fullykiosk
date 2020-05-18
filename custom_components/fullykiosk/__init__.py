@@ -121,4 +121,4 @@ async def async_handle_set_configuration_string_service(hass, call):
     print(setting)
     print(value)
 
-    await hass.data[DOMAIN][ATTR_ENTITY_ID][CONTROLLER].setConfigurationString(entity_id, setting, value)
+    await hass.data[DOMAIN][ATTR_ENTITY_ID][CONTROLLER].setConfigurationString(setting, value)
