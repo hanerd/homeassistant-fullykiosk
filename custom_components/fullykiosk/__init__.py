@@ -42,7 +42,10 @@ PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Fully Kiosk Browser component."""
-
+    async def async_set_configuration_string(call):
+        """Call set string config handler."""
+        await async_handle_set_configuration_string_service(hass, call)
+        
     hass.services.async_register(
         DOMAIN,
         SERVICE_SET_CONFIGURATION_STRING,
@@ -66,10 +69,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         """Fetch data from REST API."""
         data = await hass.async_add_executor_job(fully.getDeviceInfo)
         return data
-
-    async def async_set_configuration_string(call):
-        """Call set string config handler."""
-        await async_handle_set_configuration_string_service(hass, call)
 
     coordinator = DataUpdateCoordinator(
         hass,
