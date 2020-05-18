@@ -35,24 +35,11 @@ SET_CONFIGURATION_STRING_SCHEMA = vol.Schema(
     }
 )
 
-
-# For your initial PR, limit it to 1 platform.
 PLATFORMS = ["binary_sensor", "light", "media_player", "sensor", "switch"]
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Fully Kiosk Browser component."""
-
-    async def async_set_configuration_string(call):
-        """Call set string config handler."""
-        await async_handle_set_configuration_string_service(hass, call)
-
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_SET_CONFIGURATION_STRING,
-        async_set_configuration_string,
-        schema=SET_CONFIGURATION_STRING_SCHEMA,
-    )
 
     return True
 
@@ -92,6 +79,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             hass.config_entries.async_forward_entry_setup(entry, component)
         )
 
+    async def set_configuration_string(call) -> None:
+        """Call set string config handler."""
+
+        entity_id = call.data[ATTR_ENTITY_ID]
+        setting = call.data[CONF_FULLY_SETTING]
+        value = call.data[CONF_FULLY_SETTING_VALUE]
+        
+        await fully.setConfigurationString(setting, value)
+
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SET_CONFIGURATION_STRING,
+        set_configuration_string,
+        schema=SET_CONFIGURATION_STRING_SCHEMA,
+    )
+
+
     return True
 
 
@@ -109,16 +113,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
-
-async def async_handle_set_configuration_string_service(hass, call):
-    """Handle setting configuration string."""
-
-    entity_id = call.data[ATTR_ENTITY_ID]
-    setting = call.data[CONF_FULLY_SETTING]
-    value = call.data[CONF_FULLY_SETTING_VALUE]
-
-    print(entity_id)
-    print(setting)
-    print(value)
-
-    await print(here)
