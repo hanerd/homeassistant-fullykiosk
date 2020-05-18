@@ -112,10 +112,10 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 async def async_handle_set_configuration_string_service(hass, call):
     """Handle setting configuration string."""
-    entity_id = call.data[ATTR_ENTITY_ID]
 
+    entity_id = call.data[ATTR_ENTITY_ID]
     setting = call.data[CONF_FULLY_SETTING]
     value = call.data[CONF_FULLY_SETTING_VALUE]
 
-
+    print(call.data.keys())
     await hass.data[DOMAIN][ATTR_ENTITY_ID][CONTROLLER].setConfigurationString(entity_id, setting, value)
