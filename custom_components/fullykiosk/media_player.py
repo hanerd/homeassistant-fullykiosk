@@ -3,9 +3,11 @@ import json
 import logging
 
 import voluptuous as vol
-from homeassistant.components.media_player import (DEVICE_CLASS_SPEAKER,
-                                                   SUPPORT_PLAY_MEDIA,
-                                                   MediaPlayerDevice)
+from homeassistant.components.media_player import (
+    DEVICE_CLASS_SPEAKER,
+    SUPPORT_PLAY_MEDIA,
+    MediaPlayerDevice,
+)
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
