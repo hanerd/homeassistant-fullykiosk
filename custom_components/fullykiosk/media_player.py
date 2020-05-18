@@ -40,13 +40,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         entity_ids = call.data.get(ATTR_ENTITY_ID)
         print(entity_ids)
-        if entity_ids:
-            devices = [
-                device for device in hass.data[DOMAIN] if device.entity_id in entity_ids
-            ]
-        else:
-            devices = hass.data[DOMAIN]
-        for device in devices:
+
+        for device in entity_ids:
             await device.setConfigurationString(
                 call.data[CONF_FULLY_SETTING], call.data[CONF_FULLY_SETTING_VALUE]
             )
