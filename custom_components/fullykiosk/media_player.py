@@ -38,7 +38,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     async def set_configuration_string(call) -> None:
         """Call set string config handler."""
 
-        entity_ids = call.data[ATTR_ENTITY_ID]
+        entity_ids = call.data.get(ATTR_ENTITY_ID)
         if entity_ids:
             devices = [
                 device for device in hass.data[DOMAIN] if device.entity_id in entity_ids
