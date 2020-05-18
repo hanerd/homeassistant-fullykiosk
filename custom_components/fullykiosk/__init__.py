@@ -86,7 +86,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         setting = call.data[CONF_FULLY_SETTING]
         value = call.data[CONF_FULLY_SETTING_VALUE]
         
-        data = await hass.async_add_executor_job(fully.setCOnfigurationString(setting, value))
+        data = await hass.async_add_executor_job(fully.setConfigurationString(setting, value))
         return data
 
     hass.services.async_register(
